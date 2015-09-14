@@ -12,35 +12,42 @@ class Movie
 	/**
 	 * Genre of movie
 	 * 
-	 * @var String
+	 * @var string
 	 */
 	private $genre;
 
 	/**
 	 * Year of movie release
 	 * 
-	 * @var Integer
+	 * @var integer
 	 */
 	private $primary_release_year;
 
 	/**
+	 * Random movie
+	 * 
+	 * @var array
+	 */
+	private $movie;
+
+	/**
 	 * Movie title
 	 * 
-	 * @var String
+	 * @var string
 	 */
 	private $original_title;
 
 	/**
 	 * Movie summary
 	 * 
-	 * @var String
+	 * @var string
 	 */
 	private $overview;
 
 	/**
 	 * Path to image on tmdb website or, if null, default image
 	 * 
-	 * @var String
+	 * @var string
 	 */
 	private $image_path;
 
@@ -64,8 +71,10 @@ class Movie
 	 * 
 	 * @return array 	random movie
 	 */
-	public function getRandomMovie()
+	public function setMovie()
 	{
+		$lessOrGreater = $this->getLessOrGreater();
+
 		$sortBy = $this->getSortBy();
 
 		//Make sure a movie is recieved
@@ -76,7 +85,7 @@ class Movie
 			$tmdb_url = $this->tmdb_url_with_access_token 
 				. "&with_genres=" . $this->genre 
 				. "&primary_release_year=" . $this->primary_release_year 
-				. "&vote_average.lte=" . $randomVoteAverage
+				. "&vote_average." . $lessOrGreater . "=" . $randomVoteAverage
 				. "&sort_by=" . $sortBy;
 
 			$tmdb_json = file_get_contents($tmdb_url);
@@ -92,7 +101,17 @@ class Movie
 
 		$movie = $results[$randomIndex];
 
-		return $movie;
+		$this->movie = $movie;
+	}
+
+	/**
+	 * Get the movie
+	 * 
+	 * @return array 	random movie
+	 */
+	public function getmovie()
+	{
+		return $this->movie;
 	}
 
 	/**
@@ -100,9 +119,9 @@ class Movie
 	 * 
 	 * @param array $movie movie
 	 */
-	public function setOriginalTitle($movie)
+	public function setOriginalTitle()
 	{
-		$this->original_title = $movie["original_title"];
+		$this->original_title = $this->movie["original_title"];
 	}
 
 	/**
@@ -120,9 +139,9 @@ class Movie
 	 * 
 	 * @param array $movie movie
 	 */
-	public function setOverview($movie)
+	public function setOverview()
 	{
-		$this->overview = $movie["overview"];
+		$this->overview = $this->movie["overview"];
 	}
 
 	/**
@@ -140,9 +159,9 @@ class Movie
 	 * 
 	 * @param array $movie movie
 	 */
-	public function setImagePath($movie)
+	public function setImagePath()
 	{
-		$this->image_path = ($movie["poster_path"]) ? "http://image.tmdb.org/t/p/original" . $movie["poster_path"] : "Images/no-poster.jpg";
+		$this->image_path = ($this->movie["poster_path"]) ? "http://image.tmdb.org/t/p/original" . $this->movie["poster_path"] : "Images/no-poster.jpg";
 	}
 
 	/**
@@ -179,6 +198,15 @@ class Movie
 		return $randomIndex;
 	}
 
+	/**
+	 * Randomly get less than or equal to or greater than or equal to
+	 * 
+	 * @return string 	gte or lte
+	 */
+	private function getLessOrGreater()
+	{
+		return (rand(0, 1)) ? "gte" : "lte";
+	}
 
 	/**
 	 * Get a random sort type for the JSON return to add randomness to the results (there is a 20 result limit from tmdb)

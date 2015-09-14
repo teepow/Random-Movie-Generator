@@ -14,12 +14,12 @@
 		$movie = new Movie($genre, $year);
 
 		//Generate random movie
-		$randomMovie = $movie->getRandomMovie();
+		$movie->setMovie();
 
 		//Set values
-		$movie->setOriginalTitle($randomMovie);
-		$movie->setOverview($randomMovie);
-		$movie->setImagePath($randomMovie);
+		$movie->setOriginalTitle();
+		$movie->setOverview();
+		$movie->setImagePath();
 
 		//Get values
 		$title = $movie->getOriginalTitle();
@@ -31,12 +31,14 @@
 		
 		$message = "Please select a year";
 		$heading = "Random Movie Generator";
+		$image_path = "Images/no-poster.jpg";
 
 	//No values set
 	} else {
 		
 		$message = "Select a year and then click a genre.";
 		$heading = "Random Movie Generator";
+		$image_path = "Images/no-poster.jpg";
 	}
 
 	//Include view

@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/styles.css">
 	<title>Random Movie Generator</title>
 </head>
 <body>
+<div class="container">
 	<h1><?php echo (isset($heading)) ? $heading : $title; ?></h1>
-	<img src="<?php echo $image_path ?>" width="490" height="730" alt="Poster">
+	<img src="<?php echo $image_path ?>" width="400" height="550" alt="Poster">
 	<p><?php echo (isset($message)) ? $message : $overview; ?></p>
 
 	<form action="" method="GET">
@@ -16,5 +18,6 @@
 		<button type="submit" name="genre" value="28">Action</button>
 		<button type="submit" name="genre" value="18">Drama</button>
 	</form>
+</div>
 </body>
 </html>
